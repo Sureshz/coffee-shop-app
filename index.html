@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#5b321d" />
+  <meta name="description" content="Coffee shop sales, purchases and expense tracker" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <title>Daily Cup | Shop Manager</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar"><div class="brand"><div class="logo">☕</div><div><strong>Daily Cup</strong><small>Shop Manager</small></div></div><div class="top-actions"><span id="syncStatus" class="status-pill">Local mode</span><button id="installBtn" class="btn btn-light hidden">Install app</button></div></header>
+  <main class="container">
+    <section id="setupNotice" class="notice hidden"></section>
+    <section id="authPanel" class="panel auth-panel hidden">
+      <h2>Team sign in</h2><p>Sign in to sync shop records across your phone and staff devices.</p>
+      <label>Email<input id="authEmail" type="email" autocomplete="username" placeholder="you@example.com" /></label>
+      <label>Password<input id="authPassword" type="password" autocomplete="current-password" placeholder="At least 6 characters" /></label>
+      <div class="button-row"><button id="signInBtn" class="btn">Sign in</button><button id="registerBtn" class="btn btn-outline">Create account</button></div>
+      <p class="muted small">The first account should be the shop owner. Share access only with trusted staff.</p>
+    </section>
+    <section class="welcome-row"><div><p class="eyebrow" id="todayLabel">TODAY</p><h1>Your shop at a glance</h1><p class="muted">Record sales, stock purchases and running costs in one place.</p></div><button id="signOutBtn" class="btn btn-outline hidden">Sign out</button></section>
+    <section class="stats-grid">
+      <article class="stat-card stat-primary"><span>Today's sales</span><strong id="todaySales">₹0</strong><small id="salesBreakdown">Cash + UPI / online</small></article>
+      <article class="stat-card"><span>Today's purchases</span><strong id="todayPurchases">₹0</strong><small>Stock and supplies</small></article>
+      <article class="stat-card"><span>Today's expenses</span><strong id="todayExpenses">₹0</strong><small>Rent, salary, bills, repairs…</small></article>
+      <article class="stat-card"><span>Monthly cash surplus*</span><strong id="monthSurplus">₹0</strong><small>Sales − purchases − expenses</small></article>
+    </section>
+    <div class="section-heading"><div><h2>Quick entry</h2><p class="muted">Add a record without opening a spreadsheet.</p></div></div>
+    <section class="panel">
+      <div class="tabs" role="tablist"><button class="tab active" data-tab="sale">Sales</button><button class="tab" data-tab="purchase">Purchases</button><button class="tab" data-tab="expense">Other expense</button></div>
+      <form id="entryForm" class="entry-form">
+        <input id="entryType" type="hidden" value="sale" />
+        <div class="form-grid"><label>Date<input id="entryDate" type="date" required /></label><label>Amount (₹)<input id="entryAmount" type="number" min="0.01" step="0.01" placeholder="0.00" required /></label></div>
+        <div id="saleFields"><label>Item-wise sales <span class="muted inline-note">(optional; add quantities and prices)</span></label><div id="saleItems" class="sale-items"></div><button type="button" id="addSaleItem" class="text-button">+ Add item</button><div class="form-grid"><label>Cash received (₹)<input id="cashAmount" type="number" min="0" step="0.01" placeholder="0" /></label><label>UPI / online (₹)<input id="upiAmount" type="number" min="0" step="0.01" placeholder="0" /></label></div></div>
+        <div class="form-grid"><label>Category<select id="entryCategory" required></select></label><label>Paid / received by<select id="entryMethod"><option>Cash</option><option>UPI</option><option>Bank transfer</option><option>Credit / due</option><option>Mixed</option></select></label></div>
+        <div class="form-grid"><label>Supplier / note<input id="entryNote" type="text" placeholder="e.g. Aavin, milk, cylinder refill" /></label><label>Entered by<input id="enteredBy" type="text" placeholder="Your name / staff name" /></label></div>
+        <div class="form-footer"><span id="formMessage" class="muted small" aria-live="polite"></span><button class="btn" type="submit">Save record</button></div>
+      </form>
+    </section>
+    <section class="section-heading"><div><h2>Records</h2><p class="muted">Filter and export records for your accountant or Excel.</p></div></section>
+    <section class="panel records-panel"><div class="filters"><label>From<input type="date" id="filterFrom" /></label><label>To<input type="date" id="filterTo" /></label><label>Type<select id="filterType"><option value="all">All records</option><option value="sale">Sales</option><option value="purchase">Purchases</option><option value="expense">Other expenses</option></select></label><button id="clearFilters" class="btn btn-outline">Clear</button></div><div class="table-wrap"><table><thead><tr><th>Date</th><th>Type</th><th>Details</th><th>Method</th><th class="amount-col">Amount</th><th></th></tr></thead><tbody id="recordsBody"></tbody></table></div><p id="emptyState" class="empty-state">No records yet. Add your first entry above.</p><div class="export-row"><button id="exportBtn" class="btn btn-outline">Export records CSV</button><label class="btn btn-outline file-button">Import existing ledger CSV<input id="importFile" type="file" accept=".csv,text/csv" /></label><button id="backupBtn" class="btn btn-outline">Backup all data</button><label class="btn btn-outline file-button">Restore backup<input id="restoreFile" type="file" accept=".json,application/json" /></label></div><p class="muted small">*Cash surplus is a simple cash-based view, not formal accounting profit. Stock purchases and stock consumed differ when inventory changes.</p></section>
+    <footer><span>Daily Cup · Coffee Shop Manager</span><span id="recordCount">0 records</span></footer>
+  </main>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="app.js"></script>
+</body></html>
